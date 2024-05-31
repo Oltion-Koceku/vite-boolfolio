@@ -1,11 +1,18 @@
 <script>
 import axios from 'axios';
 import { store } from './data/store';
+import ProjectCardVue from './components/ProjectCard.vue';
   export default {
+
+    components:{
+
+      ProjectCardVue
+
+    },
+
     data(){
       return{
-
-
+        store
       }
 
     },
@@ -17,12 +24,12 @@ import { store } from './data/store';
         axios.get(store.apiUrl)
         .then(res =>{
 
-          console.log(res);
+        store.arrayApi = res.data.data
 
         })
         .catch(error =>{
 
-          console.log(error);
+          console.log('errore');
 
         })
         
@@ -43,11 +50,24 @@ import { store } from './data/store';
 </script>
 
 <template>
-  <div>
-    <h1>ciaooo</h1>
+  <div class="container">
+    <div class="row">
+      <div class="text-center w-100">
+        <h1>Projects</h1>
+      </div>
+      
+         <ProjectCardVue/>
+      
+      
+     
+    </div>
+    
+    
   </div>
 </template>
 
 <style lang="scss" scoped>
+
+  
 
 </style>
