@@ -5,6 +5,8 @@
       <div class="card-body">
         <h5 class="card-title">{{data.title}}</h5>
         <p class="card-text">{{data.description}} </p>
+        <p class="card-text">{{data.type.title}} </p>
+        <p v-for=" item in data.technologie" :key="item.id" class="card-text">{{item.title}} </p>
         <a href="http://127.0.0.1:8000/admin" class="btn btn-primary">Vai nel Database</a>
       </div>
     </div>
