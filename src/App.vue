@@ -2,12 +2,14 @@
 import axios from 'axios';
 import { store } from './data/store';
 import ProjectCardVue from './components/ProjectCard.vue';
+import headerVue from './components/partials/header.vue';
+
   export default {
 
     components:{
 
-      ProjectCardVue
-
+      ProjectCardVue,
+      headerVue
     },
 
     data(){
@@ -50,7 +52,8 @@ import ProjectCardVue from './components/ProjectCard.vue';
 </script>
 
 <template>
-  <div class="container">
+  <headerVue />
+  <!-- <div class="container">
     <div class="row">
       <div class="text-center w-100">
         <h1>Projects</h1>
@@ -63,7 +66,9 @@ import ProjectCardVue from './components/ProjectCard.vue';
     </div>
     
     
-  </div>
+  </div> -->
+
+  <router-view></router-view>
 </template>
 
 <style lang="scss" scoped>
