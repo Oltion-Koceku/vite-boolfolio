@@ -13,17 +13,17 @@ export default {
       <ul class="navbar__menu">
         <li class="navbar__item">
           <router-link :to="{ name: 'home' }" class="navbar__link"
-            ><i data-feather="home"></i><span>Home</span>
+            ><span>Home</span>
           </router-link>
         </li>
         <li class="navbar__item">
           <router-link :to="{ name: 'info' }" class="navbar__link"
-            ><i data-feather="Info"></i><span>Info</span>
+            ><span>Info</span>
           </router-link>
         </li>
         <li class="navbar__item">
           <router-link :to="{ name: 'projects' }" class="navbar__link"
-            ><i data-feather="projects"></i><span>projects</span>
+            ><span>projects</span>
           </router-link>
         </li>
         
@@ -64,6 +64,8 @@ body {
   display: flex;
   align-items: center;
   gap: 3rem;
+  z-index: 999;
+  margin-bottom: 90px;
 }
 
 .navbar {
