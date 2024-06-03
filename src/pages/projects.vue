@@ -8,16 +8,27 @@ export default {
   data() {
     return {
       store,
+
+      view : false
     };
   },
 
   methods: {
-    getApiUrl() {
+    getApiUrl(type) {
       axios
-        .get(store.apiUrl)
+        .get(store.apiUrl + type)
         .then((res) => {
-          store.arrayApi = res.data.data;
-          console.log(store.arrayApi);
+          if (type == "projects") {
+            store.arrayApi = res.data.data.map(project => ({ ...project, viewAll: false }));
+            console.log(store.arrayApi);
+        
+          } else if (type == "types") {
+            store.arrayType = res.data;
+            console.log(store.arrayType);
+          } else {
+            store.arrayTechnologie = res.data;
+            console.log(store.arrayTechnologie);
+          }
         })
         .catch((error) => {
           console.log("errore");
@@ -50,21 +61,19 @@ export default {
       const second = project[6];
 
       if (first == 0) {
-        return monthInitials[second -1]
+        return monthInitials[second - 1];
       } else {
-
-        return monthInitials[first+second -1] 
-
+        return monthInitials[first + second - 1];
       }
 
       console.log(first, second);
-
-
     },
   },
 
   mounted() {
-    this.getApiUrl();
+    this.getApiUrl("projects");
+    this.getApiUrl("types");
+    this.getApiUrl("technologies");
   },
 };
 </script>
@@ -75,8 +84,8 @@ export default {
     <div class="container">
       <div class="row">
         <div
-          v-for="project in store.arrayApi"
-          :key="project.id"
+          v-for="(project, index) in store.arrayApi"
+          :key="index"
           class="col-lg-4"
         >
           <div class="card card-margin">
@@ -90,7 +99,9 @@ export default {
                     <span class="widget-49-date-day">{{
                       getdate(project.updated_at)
                     }}</span>
-                    <span class="widget-49-date-month">{{getmonth(project.updated_at)}}</span>
+                    <span class="widget-49-date-month">{{
+                      getmonth(project.updated_at)
+                    }}</span>
                   </div>
                   <div class="widget-49-meeting-info">
                     <span class="widget-49-pro-title">{{
@@ -102,9 +113,27 @@ export default {
                   {{ project.description }}
                 </p>
                 <div class="widget-49-meeting-action">
-                  <a href="#" class="btn btn-sm btn-flash-border-primary"
-                    >View All</a
-                  >
+                  <button @click="project.viewAll = !project.viewAll" class="btn btn-sm btn-flash-border-primary"
+                    >View All</button>
+                  <div :class="project.viewAll === true  ? '' : 'd-none'" class="container d-flex">
+                    <div class="types mx-3">
+                      <h3>Types</h3>
+                      <div v-for="type in store.arrayType" :key="type.id">
+                        {{ type.title }}
+                      </div>
+                    </div>
+                    <div class="mx-3">
+                      <h3>Technologies</h3>
+
+                      <div
+                        v-for="technologie in store.arrayTechnologie"
+                        :key="technologie.id"
+                        class="technologies"
+                      >
+                        {{ technologie.title }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
