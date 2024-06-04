@@ -109,7 +109,7 @@ export default {
         >
           <div class="card card-margin">
             <div class="card-header no-border">
-              <h5 class="card-title">{{ project.title }}</h5>
+              <router-link :to="{ name: 'detailproject', params: {slug: project.slug} }" class="card-title">{{ project.title }}</router-link>
             </div>
             <div class="card-body pt-0">
               <div class="widget-49">
