@@ -20,53 +20,33 @@ export default {
   },
 
   methods: {
-    // getApiUrl(getApi ,type = '') {
-    //   console.log(getApi);
-    //   axios
-    //     .get(getApi + type)
-    //     /.then((res) => {
-    //     //   if (type == "projects") {
-    //     //     store.arrayApi = res.data.data.map((project) => ({
-    //     //       ...project,
-    //     //       viewAll: false,
-    //     //     }));
 
-    //         store.paginatorData.current_page = res.data.current_page
-    //         store.paginatorData.total = res.data.total
-    //         store.paginatorData.links = res.data.links
-
-    //         this.loader = true
-
-    //         console.log(store.paginatorData);
-    //       } else if (type == "types") {
-    //         store.arrayType = res.data;
-    //         console.log(store.arrayType);
-    //       } else {
-    //         store.arrayTechnologie = res.data;
-    //         console.log(store.arrayTechnologie);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log("errore");
-    //       this.loader = false
-    //     });
-    // },
-
-    getApiUrl(getApi, ) {
+    getApiUrl(getApi, type = '') {
+      this.loader = false
       axios
-        .get(getApi)
+        .get(getApi + type)
 
         .then((reuslt) => {
-          store.arrayApi = reuslt.data.data.map((project) => ({
-            ...project,
-            viewAll: false,
-          }));
+          if (type == "projects" || type == '') {
+            store.arrayApi = reuslt.data.data.map((project) => ({
+              ...project,
+              viewAll: false,
+            }));
+            console.log(store.arrayApi);
 
-          store.paginatorData.current_page = reuslt.data.current_page;
-          store.paginatorData.total = reuslt.data.total;
-          store.paginatorData.links = reuslt.data.links;
+            store.paginatorData.current_page = reuslt.data.current_page;
+            store.paginatorData.total = reuslt.data.total;
+            store.paginatorData.links = reuslt.data.links;
 
-          this.loader = true;
+            this.loader = true;
+          } else if (type == 'types') {
+            store.arrayType = reuslt.data;
+            this.loader = true;
+          }else{
+            store.arrayTechnologie = reuslt.data;
+            this.loader = true;
+
+          }
         })
         .catch((error) => {
           console.log(error.message);
@@ -109,10 +89,10 @@ export default {
   },
 
   mounted() {
-    this.getApiUrl(store.apiUrl);
+    this.getApiUrl(store.apiUrl, 'projects');
     //  this.getApiUrl (store.apiUrl ,"projects");
-    // this.getApiUrl (store.apiUrl ,"types");
-    // this.getApiUrl (store.apiUrl ,"technologies");
+    this.getApiUrl (store.apiUrl ,"types");
+    this.getApiUrl (store.apiUrl ,"technologies");
   },
 };
 </script>
@@ -122,7 +102,7 @@ export default {
   <div>
     <div class="container">
       <div v-if="loader == true" class="row">
-        <div 
+        <div
           v-for="(project, index) in store.arrayApi"
           :key="index"
           class="col-lg-4"
@@ -172,8 +152,8 @@ export default {
                       <h3>Technologies</h3>
 
                       <div
-                        v-for="technologie in store.arrayTechnologie"
-                        :key="technologie.id"
+                        v-for="(technologie, index) in store.arrayTechnologie"
+                        :key="index"
                         class="technologies"
                       >
                         {{ technologie.title }}
