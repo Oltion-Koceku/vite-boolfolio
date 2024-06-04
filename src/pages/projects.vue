@@ -1,37 +1,75 @@
 <script>
 import { store } from "@/data/store";
 import axios from "axios";
+import paginatorVue from "@/components/partials/paginator.vue";
 
 export default {
   name: "projects",
 
+  components: {
+    paginatorVue,
+  },
+
   data() {
     return {
       store,
+      view: false,
 
-      view : false
+      loader: false,
     };
   },
 
   methods: {
-    getApiUrl(type) {
+    // getApiUrl(getApi ,type = '') {
+    //   console.log(getApi);
+    //   axios
+    //     .get(getApi + type)
+    //     /.then((res) => {
+    //     //   if (type == "projects") {
+    //     //     store.arrayApi = res.data.data.map((project) => ({
+    //     //       ...project,
+    //     //       viewAll: false,
+    //     //     }));
+
+    //         store.paginatorData.current_page = res.data.current_page
+    //         store.paginatorData.total = res.data.total
+    //         store.paginatorData.links = res.data.links
+
+    //         this.loader = true
+
+    //         console.log(store.paginatorData);
+    //       } else if (type == "types") {
+    //         store.arrayType = res.data;
+    //         console.log(store.arrayType);
+    //       } else {
+    //         store.arrayTechnologie = res.data;
+    //         console.log(store.arrayTechnologie);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log("errore");
+    //       this.loader = false
+    //     });
+    // },
+
+    getApiUrl(getApi, ) {
       axios
-        .get(store.apiUrl + type)
-        .then((res) => {
-          if (type == "projects") {
-            store.arrayApi = res.data.data.map(project => ({ ...project, viewAll: false }));
-            console.log(store.arrayApi);
-        
-          } else if (type == "types") {
-            store.arrayType = res.data;
-            console.log(store.arrayType);
-          } else {
-            store.arrayTechnologie = res.data;
-            console.log(store.arrayTechnologie);
-          }
+        .get(getApi)
+
+        .then((reuslt) => {
+          store.arrayApi = reuslt.data.data.map((project) => ({
+            ...project,
+            viewAll: false,
+          }));
+
+          store.paginatorData.current_page = reuslt.data.current_page;
+          store.paginatorData.total = reuslt.data.total;
+          store.paginatorData.links = reuslt.data.links;
+
+          this.loader = true;
         })
         .catch((error) => {
-          console.log("errore");
+          console.log(error.message);
         });
     },
 
@@ -71,9 +109,10 @@ export default {
   },
 
   mounted() {
-    this.getApiUrl("projects");
-    this.getApiUrl("types");
-    this.getApiUrl("technologies");
+    this.getApiUrl(store.apiUrl);
+    //  this.getApiUrl (store.apiUrl ,"projects");
+    // this.getApiUrl (store.apiUrl ,"types");
+    // this.getApiUrl (store.apiUrl ,"technologies");
   },
 };
 </script>
@@ -82,8 +121,8 @@ export default {
 <template>
   <div>
     <div class="container">
-      <div class="row">
-        <div
+      <div v-if="loader == true" class="row">
+        <div 
           v-for="(project, index) in store.arrayApi"
           :key="index"
           class="col-lg-4"
@@ -113,9 +152,16 @@ export default {
                   {{ project.description }}
                 </p>
                 <div class="widget-49-meeting-action">
-                  <button @click="project.viewAll = !project.viewAll" class="btn btn-sm btn-flash-border-primary"
-                    >View All</button>
-                  <div :class="project.viewAll === true  ? '' : 'd-none'" class="container d-flex">
+                  <button
+                    @click="project.viewAll = !project.viewAll"
+                    class="btn btn-sm btn-flash-border-primary"
+                  >
+                    View Type and Technologies
+                  </button>
+                  <div
+                    :class="project.viewAll === true ? '' : 'd-none'"
+                    class="container d-flex"
+                  >
                     <div class="types mx-3">
                       <h3>Types</h3>
                       <div v-for="type in store.arrayType" :key="type.id">
@@ -140,7 +186,9 @@ export default {
           </div>
         </div>
       </div>
+      <span v-else class="loader"></span>
     </div>
+    <paginatorVue @callApi="getApiUrl" />
   </div>
 </template>
 
@@ -491,5 +539,25 @@ body {
 
 .widget-49 .widget-49-meeting-action a {
   text-transform: uppercase;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
