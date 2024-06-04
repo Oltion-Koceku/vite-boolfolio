@@ -20,14 +20,13 @@ export default {
   },
 
   methods: {
-
-    getApiUrl(getApi, type = '') {
-      this.loader = false
+    getApiUrl(getApi, type = "") {
+      this.loader = false;
       axios
         .get(getApi + type)
 
         .then((reuslt) => {
-          if (type == "projects" || type == '') {
+          if (type == "projects" || type == "") {
             store.arrayApi = reuslt.data.data.map((project) => ({
               ...project,
               viewAll: false,
@@ -39,13 +38,12 @@ export default {
             store.paginatorData.links = reuslt.data.links;
 
             this.loader = true;
-          } else if (type == 'types') {
+          } else if (type == "types") {
             store.arrayType = reuslt.data;
             this.loader = true;
-          }else{
+          } else {
             store.arrayTechnologie = reuslt.data;
             this.loader = true;
-
           }
         })
         .catch((error) => {
@@ -83,16 +81,14 @@ export default {
       } else {
         return monthInitials[first + second - 1];
       }
-
-      console.log(first, second);
     },
   },
 
   mounted() {
-    this.getApiUrl(store.apiUrl, 'projects');
+    this.getApiUrl(store.apiUrl, "projects");
     //  this.getApiUrl (store.apiUrl ,"projects");
-    this.getApiUrl (store.apiUrl ,"types");
-    this.getApiUrl (store.apiUrl ,"technologies");
+    this.getApiUrl(store.apiUrl, "types");
+    this.getApiUrl(store.apiUrl, "technologies");
   },
 };
 </script>
@@ -109,7 +105,11 @@ export default {
         >
           <div class="card card-margin">
             <div class="card-header no-border">
-              <router-link :to="{ name: 'detailproject', params: {slug: project.slug} }" class="card-title">{{ project.title }}</router-link>
+              <router-link
+                :to="{ name: 'detailproject', params: { slug: project.slug } }"
+                class="card-title"
+                >{{ project.title }}</router-link
+              >
             </div>
             <div class="card-body pt-0">
               <div class="widget-49">
@@ -144,19 +144,35 @@ export default {
                   >
                     <div class="types mx-3">
                       <h3>Types</h3>
-                      <div v-for="type in store.arrayType" :key="type.id">
-                        {{ type.title }}
+                      <div v-if="project.type != null">
+                        <span class="badge text-bg-warning">{{
+                          project.type?.title
+                        }}</span>
+                      </div>
+                      <div v-else class="technologies">
+                        <span class="badge text-bg-danger"
+                          >Nessun Type</span
+                        >
                       </div>
                     </div>
                     <div class="mx-3">
                       <h3>Technologies</h3>
 
                       <div
-                        v-for="(technologie, index) in store.arrayTechnologie"
-                        :key="index"
+                        v-if="project.technologie.length > 0"
                         class="technologies"
                       >
-                        {{ technologie.title }}
+                        <div v-for="item in project.technologie" :key="item.id">
+                          <span class="badge text-bg-warning">{{
+                            item.title
+                          }}</span>
+                        </div>
+                      </div>
+
+                      <div v-else class="technologies">
+                        <span class="badge text-bg-danger"
+                          >Nessuna Technologie</span
+                        >
                       </div>
                     </div>
                   </div>

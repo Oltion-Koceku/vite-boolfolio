@@ -46,13 +46,11 @@ export default {
         year: "numeric", // anno con quattro cifre
       });
 
-      return dataFormattata
+      return dataFormattata;
     },
   },
 
-  computed: {
-    
-  },
+  computed: {},
 
   mounted() {
     this.getApiUrl();
@@ -75,6 +73,24 @@ export default {
         <p class="card-text">
           {{ detail.description }}
         </p>
+        <p>
+          Type:
+          <span v-if="detail.type != null" class="badge text-bg-warning">{{
+            detail.type?.title
+          }}</span>
+          <span v-else class="badge text-bg-danger">Nessun Type</span>
+        </p>
+        <div class="d-flex justify-content-center mb-2">
+          Technologie:
+          <div v-if="detail.technologie?.length > 0" class="technologies">
+            <div v-for="item in detail.technologie" :key="item.id">
+              <span class="badge text-bg-warning">{{ item.title }}</span>
+            </div>
+          </div>
+          <div v-else class="technologies">
+            <span class="badge text-bg-danger">Nessuna Technologie</span>
+          </div>
+        </div>
         <router-link :to="{ name: 'projects' }" class="btn btn-primary"
           >Torna Indietro</router-link
         >
