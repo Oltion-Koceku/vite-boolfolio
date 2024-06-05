@@ -64,7 +64,7 @@ export default {
 
     <div class="card text-center d-flex align-items-center">
       <img
-        :src="'http://127.0.0.1:8000' + detail.img"
+        :src="detail.img"
         :alt="detail.title"
         class="w-25"
       />

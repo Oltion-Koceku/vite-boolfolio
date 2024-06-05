@@ -23,7 +23,12 @@ export default {
         </li>
         <li class="navbar__item">
           <router-link :to="{ name: 'projects' }" class="navbar__link"
-            ><span>projects</span>
+            ><span>Projects</span>
+          </router-link>
+        </li>
+        <li class="navbar__item">
+          <router-link :to="{ name: 'contact' }" class="navbar__link"
+            ><span>Contact</span>
           </router-link>
         </li>
         

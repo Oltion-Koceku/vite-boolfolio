@@ -5,6 +5,7 @@ import info from './pages/info.vue';
 import projects from './pages/projects.vue';
 import detailproject from './pages/detailproject.vue';
 import error404 from './pages/error404.vue';
+import contact from './pages/contact.vue';
 
 const router = createRouter({
 
@@ -32,6 +33,12 @@ const router = createRouter({
       path: '/project-detail/:slug',
       name: 'detailproject',
       component: detailproject
+
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: contact
 
     },
     {
